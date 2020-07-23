@@ -1,0 +1,58 @@
+{
+  "id": "1930837",
+  "name": "echarts",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "10597644",
+      "name": "add",
+      "font_class": "add1",
+      "unicode": "e794",
+      "unicode_decimal": 59284
+    },
+    {
+      "icon_id": "12468570",
+      "name": "add",
+      "font_class": "add",
+      "unicode": "e667",
+      "unicode_decimal": 58983
+    },
+    {
+      "icon_id": "9155953",
+      "name": "theme",
+      "font_class": "theme",
+      "unicode": "e626",
+      "unicode_decimal": 58918
+    },
+    {
+      "icon_id": "1444787",
+      "name": "json",
+      "font_class": "json",
+      "unicode": "e7bd",
+      "unicode_decimal": 59325
+    },
+    {
+      "icon_id": "10507695",
+      "name": "设 置",
+      "font_class": "shezhi",
+      "unicode": "e628",
+      "unicode_decimal": 58920
+    },
+    {
+      "icon_id": "12492442",
+      "name": "move",
+      "font_class": "move",
+      "unicode": "e7d0",
+      "unicode_decimal": 59344
+    },
+    {
+      "icon_id": "11115382",
+      "name": "移动",
+      "font_class": "yidong",
+      "unicode": "e64f",
+      "unicode_decimal": 58959
+    }
+  ]
+}

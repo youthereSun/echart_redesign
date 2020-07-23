@@ -1,0 +1,177 @@
+
+#configs {
+  min-height: 100vh;
+  background-color: #77878D;
+
+  .el-tag + .el-tag {
+    margin-left: 10px;
+  }
+  .button-new-tag {
+    margin-left: 10px;
+    height: 32px;
+    line-height: 30px;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  .selectChart{
+    .el-dialog--center .el-dialog__body{
+      padding: 0;
+    }
+
+    .el-dialog__header{
+      display: none;
+    }
+  }
+
+  .closeSample{
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    background-color: #5B5D6B;
+    position: absolute;
+    top: -15px;
+    right:-10px;
+    font-size: 20px;
+    color: white;
+    line-height: 30px;
+    border-radius: 2px;
+  }
+
+  .codeDialog{
+
+
+    .el-dialog {
+      background-color: whitesmoke
+
+    }
+    .el-dialog__title{
+      color: black;
+    }
+    .el-input--small{
+      width: 100%;
+      margin-bottom: 10px;
+    }
+    .el-input--small .el-input__inner{
+      height: 40px;
+    }
+
+    .input-new-tag {
+      height: 20px !important;
+      width: 90px !important;
+      margin-left: 10px;
+      vertical-align: bottom;
+      box-sizing: border-box;
+    }
+  }
+
+  .toAddnew{
+    cursor: pointer;
+    font-family: "黑体", "微软雅黑 Light", "方正舒体";
+    height: 20px;
+    line-height: 20px;
+    font-size: 20px;
+    position: absolute;
+    color: black;
+    top: 10%;
+    left: 2%;
+    padding: 10px 20px;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0 0 10px black;
+  }
+  .el-header{
+    position: relative;
+    background-color: #373941;
+  }
+
+  .passing {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    padding: 10px 0;
+    position: absolute;
+    top: 0;
+    background-color:rgba(85,157,195,.7);
+    animation: passing_4500 0.4s ease-in-out 0s 1 alternate forwards;
+  }
+
+  @keyframes passing_4500 {
+    0% {
+      transform: translateY(-100%);
+      opacity: .4
+    }
+    33.33333% {
+      transform: translateY(120%);
+      opacity: .6
+    }
+    66.66667% {
+      transform: translateY(50%);
+      opacity: .7
+    }
+    100% {
+      transform: translateY(100%);
+      opacity: 1
+    }
+  }
+
+  .configTitle{
+    font-size: 25px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    color:gainsboro;
+    transform: translate(-50%,-50%);
+  }
+
+  .cardContainer {
+    width: 1360px;
+    margin: 0px auto;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+
+    .newConfiguration{
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      font-size: 60px;
+      transform: translate(-50%,-50%);
+      color: #77878D;
+
+    }
+
+    .imgContainer {
+      border-radius: 10px;
+      text-align: center;
+      width: 300px;
+      height: 180px;
+      margin: 20px;
+      position: relative;
+      background-color: white;
+
+      .imgOperation{
+        display: none;
+
+      }
+
+      .chartImg {
+        padding: 10px;
+        width: 250px;
+
+      }
+      .imgTitle{
+        border-radius:0 0 10px 10px;
+        width: 300px;
+        position: absolute;
+        bottom:0px;
+        color: white;
+        font-family: "黑体", "微软雅黑 Light", "方正舒体";
+        background-color: rgba(85,157,195,.7);
+        height: 25px;
+        line-height: 25px;
+
+      }
+    }
+
+  }
+}

@@ -1,0 +1,224 @@
+@theme_color_bg: #373941;
+@theme_color_front: #4C4E59;
+@theme_font_size: 12px;
+@theme_font_color: #f0f0f0;
+@theme_font_color_hover: #42b983;
+@theme_font_color_active: #409EFF;
+@theme_color_subTab: #5B5D6B;
+@header_height: 80px;
+@setting_group_title_color:#42b983;
+
+
+#chart {
+  font-size: @theme_font_size;
+  color: @theme_font_color;
+  background-color: @theme_color_front;
+
+  .submitButton{
+    position: absolute;
+    right: 25px;
+    top: 25px;
+  }
+
+  .refreshDataButton{
+    position: absolute;
+    right: 80px;
+    top: 25px;
+  }
+
+
+
+  .loading{
+    position: absolute;
+  }
+.headerTitle {
+  margin-top: 15px;
+  margin-left: 3px;
+  width: 20px;
+  height: 20px;
+  font-size: 20px;
+  vertical-align: middle;
+  font-family: "华文宋体","微软雅黑";
+}
+  .chartBg{
+    width: 100%;
+    height: 100%;
+  }
+  .changeBg{
+    position: absolute;
+    right: 1%;
+    top: 40%;
+  }
+
+
+  .el-header {
+    background-color: @theme_color_bg;
+    box-shadow: 0px 1px 3px black;
+    z-index: 5000;
+    height: 80px !important;
+
+  }
+  .bgChangeButton,.bgChangeButton:hover{
+    background-color: transparent;
+    border: none;
+  }
+
+
+  .bgChangeButton:hover .icon-theme {
+    color: #66B1FF;
+  }
+
+  .el-drawer {
+    height: calc(100vh);
+    width:600px !important;
+    background-color: @theme_color_bg;
+    box-shadow: 1px 0px 3px black;
+    box-sizing: border-box;
+    padding: 10px 0px;
+
+    .settings_title {
+      padding: 10px;
+      position: relative;
+
+      .settings_title_text {
+        margin-left: 20%;
+      }
+
+      .button_closeDrawer {
+        padding: 5px 20px;
+        position: absolute;
+        top: 5px;
+        right: 10px;
+        border-radius: 0;
+
+      }
+
+    }
+
+    .tabs_container {
+      padding: 10px;
+      overflow-y: hidden;
+
+      .el-tabs__item {
+        font-size: @theme_font_size;
+        border: none;
+        color: white;
+      }
+
+      .is-active {
+        background-color: @theme_color_subTab !important;
+        color: #409EFF;
+      }
+
+
+
+      .el-tabs__item:hover {
+        background-color: @theme_font_color_hover;
+      }
+
+      .el-tabs__active-bar {
+        background-color: @theme_color_subTab;
+      }
+
+      .el-tabs--left .el-tabs__header.is-left {
+        margin: 0;
+      }
+
+      .el-tabs--left .el-tabs__nav-wrap.is-left::after, .el-tabs--left .el-tabs__nav-wrap.is-right::after, .el-tabs--right .el-tabs__nav-wrap.is-left::after, .el-tabs--right .el-tabs__nav-wrap.is-right::after {
+        width: 0;
+      }
+      .el-tabs--left .el-tabs__item.is-left{
+        text-align: center;
+      }
+
+      .subTabs {
+        .el-tabs--left .el-tabs__header.is-left {
+          background-color: @theme_color_subTab;
+          height: 100vh;
+        }
+
+        .el-tabs__item {
+          background-color: @theme_color_subTab;
+        }
+        .el-tabs__item:hover{
+          background-color: #42b983;
+        }
+
+        .el-tabs__content {
+          padding: 10px;
+          height: 100vh;
+          background-color: @theme_color_front;
+        }
+      }
+    }
+
+
+  }
+
+  .pane_container {
+    .setting_group_name {
+      color: @setting_group_title_color;
+      padding: 10px 0;
+    }
+  }
+
+  .el-main {
+    min-height: calc(100vh );
+    position: relative;
+      .dragPoint{
+        box-shadow: 0 0px 20px #66B1FF ;
+        border-radius: 2px;
+        font-size: 20px;
+        display: block;
+        text-align: center;
+        width: 35px;
+        height: 20px;
+        background-color: #373941;
+        position: absolute;
+        top: -10px;
+        right: -10px;
+      }
+    .settingButton{
+      z-index: 999;
+      color: #4C4E59;
+      font-size: 20px;
+      position: absolute;
+      left:-20px ;
+      top: 30%;
+      display: block;
+      width: 30px;
+      height: 30px;
+      background-color: #4C4E59;
+      line-height: 30px;
+      text-align: center;
+      border-radius: 100px;
+      color: gainsboro;
+      box-shadow: 0 0 10px white;
+
+    }
+    .viewCodeButton{
+      z-index: 999;
+      color: #4C4E59;
+      font-size: 20px;
+      position: absolute;
+      left:-20px ;
+      top: 20%;
+      display: block;
+      width: 30px;
+      height: 30px;
+      background-color: #4C4E59;
+      line-height: 30px;
+      text-align: center;
+      border-radius: 100px;
+      color: gainsboro;
+      box-shadow: 0 0 10px white;
+    }
+    .icon-theme{
+      font-size: 30px;
+      color: white;
+    }
+
+  }
+
+
+}

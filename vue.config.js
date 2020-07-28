@@ -3,7 +3,8 @@ module.exports = {
     // vue项目中关闭eslint
     lintOnSave: 'warning',//boolean | 'warning' | 'default' | 'error'
     publicPath: process.env.NODE_ENV === 'production' ? './' : '/',
-    outputDir:"productionDist",
+    outputDir:"../bi/assets",
+    assetsDir:"static",
     transpileDependencies: [
         'vue-echarts',
         'resize-detector'
@@ -22,7 +23,7 @@ module.exports = {
         },
         proxy: {
             '/api': {
-                target: 'http://192.168.0.227:8030', //  目标地址 测试服
+                target: 'http://localhost:8030', //  目标地址 测试服
                 ws: true, // 是否代理websockets
                 changeOrigin: true, // 设置同源  默认false，是否需要改变原始主机头为目标URL,
                 pathRewrite: {

@@ -8,6 +8,7 @@ import './assets/styles/index.less'
 import './assets/icons/iconfont.css'
 import JsonViewer from 'vue-json-viewer'
 import { Message } from 'element-ui';
+import Base64 from "./utils/base64";
 import {
     Container,
     Header,
@@ -45,6 +46,9 @@ import vuescroll from 'vuescroll';
 Vue.use(vuescroll);
 Vue.use(JsonViewer)
 
+//(开发中上测试环境和后端联调，需要禁用mock时，注释这段代码就可以)：
+import './mock/index'
+
 Vue.prototype.$ELEMENT = {size: 'small', zIndex: 3000};
 Vue.prototype.$message=Message
 // import ECharts modules manually to reduce bundle size
@@ -70,6 +74,9 @@ ECharts.registerMap('china', china)
 Vue.component('v-chart', ECharts)
 
 Vue.config.productionTip = false
+
+//base64挂载到vue全局上
+Vue.prototype.$Base64 = Base64;
 
 new Vue({
     router,

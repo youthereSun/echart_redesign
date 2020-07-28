@@ -1,12 +1,12 @@
 <template>
     <div id="chart">
         <el-container>
-            <el-header>
-                <!--   <div @click="toChartChoose" class="headerTitle">图说</div>-->
-                <el-button v-if="refreshCode"  class="refreshDataButton"   @click="refreshCodeByCode"  icon="el-icon-refresh" circle></el-button>
-                <el-button @click="saveConfiguration" class="submitButton" type="success" icon="el-icon-check" circle></el-button>
 
-            </el-header>
+                <!--   <div @click="toChartChoose" class="headerTitle">图说</div>-->
+                <el-button v-if="refreshCode && afterLoaded"  class="refreshDataButton"   @click="refreshCodeByCode"  icon="el-icon-refresh" circle></el-button>
+                <el-button v-if="afterLoaded" @click="saveConfiguration" class="submitButton" type="success" icon="el-icon-check" circle></el-button>
+
+
             <el-main>
                 <el-popover
                         class="changeBg"
@@ -49,7 +49,7 @@
                             <i v-show="!showLineDrawer&&!showPieDrawer"
                                @click="toggleDrawer(true,item.id,item.otherSetting.chartType)"
                                class="iconfont icon-shezhi settingButton"></i>
-                            <v-chart :theme="item.otherSetting.chartTheme" :autoresize="true" :options="item"/>
+                            <v-chart @click="getDeatails" :theme="item.otherSetting.chartTheme" :autoresize="true" :options="item"/>
                         </div>
                     </div>
                 </VueDragResize>
@@ -77,8 +77,7 @@
 </template>
 
 <script>
-    import axios from 'axios';
-    import {getChartDataByCode,saveConfigration,uploadImg,loadImg} from "../api/api";
+    import {getChartDataByCode,saveConfigration,uploadImg} from "../api/api";
     import {mapState, mapMutations} from 'vuex'
     import line_drawer from "../components/setting_module/drawers/line_drawer";
     import pie_drawer from "../components/setting_module/drawers/pie_drawer";
@@ -107,7 +106,7 @@
     import 'echarts/theme/infographic'
     import 'echarts/theme/green'
     import 'echarts/theme/dark-mushroom'
-    import {formatData,base64ToBlob,base64ToFile} from "../utils/utils";
+    import {formatData,base64ToFile} from "../utils/utils";
     import clone from "../utils/deepClone";
 
     export default {
@@ -132,7 +131,8 @@
                     x: 600,
                     y: 150
                 },
-                refreshCode:""
+                refreshCode:"",
+                afterLoaded:false
 
             }
         },
@@ -163,15 +163,19 @@
             pie_drawer
         },
         created() {
-            this.chartType = this.$route.query.type;
+
+
+            let params = JSON.parse(this.$Base64.decode(this.$route.query.key))
+            this.chartType = params.type;
             /*如果url路径中有id，则为重新编辑，储存的id时候需要放在params中*/
-            if(this.$route.query.id){
-                this.id=this.$route.query.id;
+            if(params.id){
+                this.id=params.id;
             }
 
-            this.code = this.$route.query.code;
-            this.title = this.$route.query.title;
-            this. legendData = this.$route.query.legendData;
+            this.code =params.code;
+            this.title = params.title;
+            this. legendData = params.legendData;
+            this.mode=params.mode;
 
             /*如果有参数有code，则为新增，用code拿数据==没有code，为编辑,取refreshCode刷新数据*/
             if(this.code){
@@ -180,7 +184,10 @@
                 }
                 this.loadData(params);
             }else {
-                this. refreshCode=this.$route.query.refreshCode;
+                /*自动展开配置卡*/
+                this.toggleDrawer(true,0,this.chartType)
+                this. refreshCode=params.refreshCode;
+                this.afterLoaded=true;
             }
 
 
@@ -229,7 +236,7 @@
                 } else {
                     this.seriesLength = this.chartList[id].series.length
                     this.seriesNames=this.chartList[id].legend.data;
-                    if (type == "line" || type == "scatter") {
+                    if (type == "line" || type == "scatter"||type=="bar") {
                         this.showLineDrawer = true
                     } else if (type == "pie" || type == "map") {
                         this.showPieDrawer = true
@@ -252,16 +259,18 @@
                 this.$set(chartList_copy[0].otherSetting, "backgroundClass", name);
                 this.setChartData(chartList_copy[0])
             },
-            toChartChoose() {
-                this.$router.push({
-                    path: "/chartChoose"
-                })
-            },
+
             createdNewChart(type,chartData) {
                 let newChart = {};
 
                 switch (type) {
                     case "line":
+                        var opacity=0;
+                        if(this.mode==1){/*普通折线*/
+                            opacity=0
+                        }else if (this.mode==2||this.mode==4) {/*面积和堆积图*/
+                            opacity=1
+                        }
                         var seriesConfigLine = JSON.stringify(this.chartConfig_line.series[0]);
                         newChart = JSON.parse(JSON.stringify(this.chartConfig_line));
                         newChart.xAxis[0].data =chartData.xAxisData;
@@ -271,9 +280,20 @@
                             let copyObj = JSON.parse(seriesConfigLine);
                             copyObj.data = chartData.seriesData[i].data;
                             copyObj.name =chartData. seriesData[i].name;
+                            copyObj.itemStyle.normal.areaStyle.opacity=opacity
                             copyObj.type = "line"
+                            if(this.mode==4){/*堆积图*/
+                                copyObj.stack ="总量";
+                            }
                             newChart.series[i] = copyObj
                         }
+                        if(this.mode==3){
+                            let xAxis=JSON.stringify(newChart.xAxis)
+                            let yAxis=JSON.stringify(newChart.yAxis)
+                            newChart.xAxis=JSON.parse(yAxis);
+                            newChart.yAxis=JSON.parse(xAxis);
+                        }
+
                         break;
                     case "bar":
                         var seriesConfigBar = JSON.stringify(this.chartConfig_bar.series[0]);
@@ -288,6 +308,15 @@
                             copyObj.type = "bar"
                             newChart.series[i] = copyObj
                         }
+
+                        if(this.mode==1){/*默认*/
+                            /*default*/
+                        }else if (this.mode==2) {/*xy交换*/
+                            let xAxis=JSON.stringify(newChart.xAxis)
+                            let yAxis=JSON.stringify(newChart.yAxis)
+                            newChart.xAxis=JSON.parse(yAxis);
+                            newChart.yAxis=JSON.parse(xAxis);
+                        }
                         break;
                     case "pie":
 
@@ -301,6 +330,14 @@
                             data[i].value=chartData.seriesData[0].data[i];
                         }
                         newChart.series[0].data = data;
+
+                        if(this.mode==1){
+                                /**/
+                        }else if (this.mode==2) {
+                          newChart.series[0].roseType="radius"
+                        }else if (this.mode==3) {
+                            newChart.series[0].roseType="area"
+                        }
 
 
                         break;
@@ -334,7 +371,10 @@
                     newChart.legend.data=this.legendData;
                 }
 
-                this.setChartDataIndex0(newChart)
+                this.setChartDataIndex0(newChart);
+                /*自动展开配置卡*/
+                this.toggleDrawer(true,0,this.chartType)
+                this.afterLoaded=true;
 
             },
             loadData(params) {
@@ -405,13 +445,14 @@
                             }
                             chart.series[0].data = data;
                             break;
-
                     }
                     this.setChartDataIndex0(chart);
                 })
 
+            },
+            getDeatails(data){
+                console.log(data)
             }
-
         }
     };
 </script>

@@ -69,7 +69,7 @@ export function getAllConfiguration ( callback) {
 
 export function getChartDataById (data, callback) {
     return new Request().post({
-        url: 'handler/biHandler/echartGet',
+        url: '/handler/biHandler/echartGet',
         data,
         callback
     });
@@ -77,7 +77,7 @@ export function getChartDataById (data, callback) {
 
 export function saveConfigration (data, callback) {
     return new Request().post({
-        url: 'handler/biHandler/saveEchart',
+        url: '/handler/biHandler/saveEchart',
         data,
         callback
     });
@@ -94,7 +94,7 @@ export function uploadImg (data, callback) {
 
 export function loadImg (data, callback) {
     return new Request().post({
-        url: 'handler/biHandler/coverGet',
+        url: '/handler/biHandler/coverGet',
         data,
         callback
     });
@@ -103,14 +103,15 @@ export function loadImg (data, callback) {
 
 export function deleteConfiguration (data, callback) {
     return new Request().post({
-        url: 'handler/biHandler/deleteEchart',
+        url: '/handler/biHandler/deleteEchart',
         data,
         callback
     });
 }
+
 export function viewChartById (data, callback) {
     return new Request().post({
-        url: 'handler/biHandler/echartGet',
+        url: '/handler/biHandler/echartGet',
         data,
         callback
     });
@@ -118,7 +119,7 @@ export function viewChartById (data, callback) {
 
 export function editChartById (data, callback) {
     return new Request().post({
-        url: 'handler/biHandler/echartGet',
+        url: '/handler/biHandler/echartGet',
         data,
         callback
     });

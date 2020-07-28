@@ -1,7 +1,9 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import createPersistedState from 'vuex-persistedstate'
 
 Vue.use(Vuex)
+const PERSIST_PATHS = ['chartList']
 const myPlugin = store => {
     // 当 store 初始化后调用
     store.subscribe((mutation, state) => {
@@ -10,7 +12,9 @@ const myPlugin = store => {
     })
 }
 export default new Vuex.Store({
-    plugins:[myPlugin],
+    plugins:[myPlugin,createPersistedState({storage:window.sessionStorage,
+        paths: PERSIST_PATHS
+    })],
     state: {
         showLoading:false,
         drawerOption: {
@@ -221,7 +225,7 @@ calculable: true,
 }*/
         ],
         currentChartId: 0,
-        /*不同图表基本配置[0]："line"||"bar",[1]:"bar"，[2]:"scatter",[3]:"map"*/
+        /*不同图表基本配置[0]："line"||"bar",[1]:"pie"，[2]:"scatter",[3]:"map"*/
         chartBaseConfig: [
             {
                 otherSetting: {
@@ -355,7 +359,7 @@ calculable: true,
                             type: ["line", "bar"]
                         },
                         restore: {
-                            show: true
+                            show: false
                         },
                         saveAsImage: {
                             show: true
@@ -631,7 +635,6 @@ calculable: true,
                             show: true
                         }
                     },
-
                 },
                 calculable: true,
                 series: [
@@ -639,7 +642,7 @@ calculable: true,
                         center: ["50%", "60%"],
                         name: "默认",/*待补充*/
                         type: "pie",
-                        radius: [0, 100],
+                        radius: [30, 150],
                         data: [],/*待补充*/
                         roseType: "",
                         startAngle: 0,
@@ -800,7 +803,7 @@ calculable: true,
                             type: ["line", "bar"]
                         },
                         restore: {
-                            show: true
+                            show: false
                         },
                         saveAsImage: {
                             show: true
@@ -1056,7 +1059,7 @@ calculable: true,
                     feature: {
                         mark: {show: true},
                         dataView: {show: true, readOnly: false},
-                        restore: {show: true},
+                        restore: {show: false},
                         saveAsImage: {show: true}
                     }
                 },

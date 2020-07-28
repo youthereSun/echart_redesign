@@ -42,44 +42,50 @@
                 </div>
 
                 <span slot="footer" class="dialog-footer">
-    <el-button @click="toEditChart" type="primary">下 一 步</el-button>
+                <el-button @click="toEditChart" type="primary">下 一 步</el-button>
             </span>
             </el-dialog>
-            <el-dialog   center class="selectChart" :visible.sync="showSample">
+            <el-dialog center class="selectChart" :visible.sync="showSample">
                 <create-new-configuration @showDialog="createNewChart"/>
                 <div @click="showSample=false" class="el-icon-close closeSample"></div>
             </el-dialog>
-            <el-header>
-                <div class="configTitle">Logwire-BI 我的作品</div>
+            <el-header height="60px">
+                <div class="configTitle">LBI</div>
             </el-header>
-            <div class="cardContainer">
-                <div @mouseenter="item.flag=true" @mouseleave="item.flag=flag" class="imgContainer" v-for="item in configurationList"
+            <vue-scroll :ops="vueScrollOption">
+              <div class="cardContainer">
+                <div @mouseenter="item.flag=true" @mouseleave="item.flag=flag" class="imgContainer"
+                     v-for="item in configurationList"
                      :key="item.id">
                     <img class="chartImg" :src="item.file | base64Fliter">
                     <div class="imgTitle">{{item.title}}(code:{{item.code}})</div>
                     <div :class="item.flag?'passing':'imgOperation'">
 
-                        <div  class="imgOperationButton">
-                            <el-button  @click="editChart(item.id,item.code)"  type="primary" icon="el-icon-edit" circle></el-button>
+                        <div class="imgOperationButton">
+                            <el-button @click="editChart(item.id,item.code)" type="primary" icon="el-icon-edit"
+                                       circle></el-button>
                         </div>
-                        <div  class="imgOperationButton">
+                        <div class="imgOperationButton">
 
-                            <el-button  @click="deleteChart(item.id)" type="danger" icon="el-icon-delete" circle></el-button>
+                            <el-button @click="deleteChart(item.id)" type="danger" icon="el-icon-delete"
+                                       circle></el-button>
                         </div>
                     </div>
                 </div>
-                <div @click="addNew"  class="imgContainer newConfigurationContainer" >
-                   <i class="iconfont icon-add1 newConfiguration"></i>
+                <div @click="addNew" class="imgContainer newConfigurationContainer">
+                    <i class="iconfont icon-add1 newConfiguration"></i>
                 </div>
+                <div v-for="i of (4-(configurationList.length+1)%4)" class="imgContainer blankHolder "></div>
             </div>
+            </vue-scroll>
         </el-container>
 
     </div>
 </template>
 
 <script>
-    import {getAllConfiguration,viewChartById,deleteConfiguration} from "../api/api";
-    import {mapMutations} from "vuex";
+    import {getAllConfiguration, viewChartById, deleteConfiguration} from "../api/api";
+    import {mapMutations, mapState} from "vuex";
     import createNewConfiguration from "../components/createNewConfiguration";
 
     export default {
@@ -88,91 +94,109 @@
             return {
                 configurationList: [],
                 flag: false,
-                dialogVisible:false,
-                showSample:false,
+                dialogVisible: false,
+                showSample: false,
+                mode:"",
                 code: "",
                 title: "",
                 chartType: "",
                 dynamicTags: ['默认'],
                 tempTag: '',
                 isChange: false,
-                isRepeatedData:false,
+                isRepeatedData: false,
                 inputVisible: false,
                 inputValue: '',
-                showSeriesAdd:false
+                showSeriesAdd: false
 
             }
         },
-        filters:{
-            base64Fliter:function (val) {
-                return "data:image/png;base64,"+val
+        computed: {
+            ...mapState({
+
+                vueScrollOption: state => state.vueScrollOption,
+
+            })
+        },
+        filters: {
+            base64Fliter: function (val) {
+                return "data:image/png;base64," + val
             }
         },
-        components:{
+        components: {
             createNewConfiguration
         },
         created() {
             this.getConfiguration()
         },
         methods: {
-            ...mapMutations([ "toggleShowLoading","setChartDataIndex0"]),
+            ...mapMutations(["toggleShowLoading", "setChartDataIndex0"]),
             getConfiguration() {
-                let _self=this;
+                let _self = this;
                 _self.toggleShowLoading(true);
                 getAllConfiguration(res => {
+                    console.log(res)
                     _self.toggleShowLoading(false);
                     this.configurationList = res.data;
                 })
             },
-            addNew(){
-                this.showSample=true
+            addNew() {
+                this.showSample = true
                 //this.$router.push({path: "/"})
             },
-/*            viewChart(id){
-                let params={
-                    id:id
-                }
-                viewChartById(params,res=>{
-                    this.setChartDataIndex0(JSON.parse(res.data.config))
-                    this.$router.push({path:"/home"})
-                })
+            /*            viewChart(id){
+                            let params={
+                                id:id
+                            }
+                            viewChartById(params,res=>{
+                                this.setChartDataIndex0(JSON.parse(res.data.config))
+                                this.$router.push({path:"/home"})
+                            })
 
-            },*/
-            editChart(id,code){
-                let _self=this;
-                let params={
-                    id:id
+                        },*/
+            editChart(id, code) {
+                let _self = this;
+                let params = {
+                    id: id
                 }
                 _self.toggleShowLoading(true);
-                viewChartById(params,res=>{
+                viewChartById(params, res => {
                     _self.toggleShowLoading(false);
                     this.setChartDataIndex0(JSON.parse(res.data.config))
-                    this.$router.push({path:"/home",query:{type:res.data.type,id:res.data.id,refreshCode:code}})
+                    this.$router.push({
+                        path: "/edit", query: {
+                            key: this.$Base64.encode(
+                                JSON.stringify({
+                                    type: res.data.type, id: res.data.id, refreshCode: code
+                                })
+                            )
+                        }
+                    })
                 })
 
             },
-            deleteChart(id){
-                let _self=this;
-                let params={
-                    id:id
+            deleteChart(id) {
+                let _self = this;
+                let params = {
+                    id: id
                 }
                 _self.toggleShowLoading(true);
-                deleteConfiguration(params,res=>{
-                    if(res.message=="请求成功"){
+                deleteConfiguration(params, res => {
+                    if (res.message == "请求成功") {
                         _self.toggleShowLoading(false);
                         this.$message.success("删除配置成功！")
                         this.getConfiguration();
-                    }else {
+                    } else {
                         this.$message.info("发生错误")
                     }
                 })
 
             },
-            createNewChart(type) {
-                this.showSample=false;
+            createNewChart(type,mode) {
+                this.showSample = false;
                 this.dialogVisible = true;
                 this.chartType = type;
                 this.showSeriesAdd = true
+                this.mode=mode;
                 if (type == "pie") {
                     this.showSeriesAdd = false
                     this.dynamicTags = [""];
@@ -197,21 +221,20 @@
                 let inputValue = this.inputValue;
                 //去除空格
                 inputValue = inputValue.replace(/^\s\s*/, '').replace(/\s\s*$/, '');
-                if(inputValue == ''){
+                if (inputValue == '') {
                     this.inputVisible = false;
                     return;
                 }
                 //判断新增的值是否重复
-                if(this.dynamicTags.indexOf(inputValue) != -1 && this.tempTag != inputValue){
+                if (this.dynamicTags.indexOf(inputValue) != -1 && this.tempTag != inputValue) {
                     this.isRepeatedData = true;
                     this.openWarring();
                     return;
-                }
-                else{
+                } else {
                     this.isRepeatedData = false;
                 }
                 //判断是否修改原有的值，是则替换修改好的值，否则新增
-                if(this.isChange){
+                if (this.isChange) {
                     this.dynamicTags[this.dynamicTags.indexOf(this.tempTag)] = this.inputValue;
                     this.inputVisible = false;
                     return;
@@ -223,7 +246,7 @@
                 this.inputValue = '';
             },
 
-            changeValue(tag){
+            changeValue(tag) {
                 this.inputVisible = true;
                 this.$nextTick(_ => {
                     this.$refs.saveTagInput.$refs.input.focus();
@@ -235,7 +258,7 @@
 
             //提示
             openWarring(text) {
-                if(!text){
+                if (!text) {
                     var text = '警告!不允许添加重复数据！';
                 }
                 this.$message({
@@ -247,12 +270,15 @@
             toEditChart() {
                 if (this.code && this.title && this.dynamicTags.length > 0) {
                     this.$router.push({
-                        path: '/home',   //跳转的路径
-                        query: {           //路由传参时push和query搭配使用 ，作用时传递参数
-                            type: this.chartType,
-                            code: this.code,
-                            title: this.title,
-                            legendData: this.dynamicTags
+                        path: '/edit',   //跳转的路径
+                        query: {
+                            key: this.$Base64.encode(JSON.stringify({      //路由传参时push和query搭配使用 ，作用时传递参数
+                                type: this.chartType,
+                                code: this.code,
+                                title: this.title,
+                                legendData: this.dynamicTags,
+                                mode:this.mode
+                            }))
                         }
                     })
                 } else {

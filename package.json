@@ -34,6 +34,8 @@
     "eslint-plugin-vue": "^6.2.2",
     "less": "^3.0.4",
     "less-loader": "^5.0.0",
-    "vue-template-compiler": "^2.6.11"
+    "mockjs": "^1.1.0",
+    "vue-template-compiler": "^2.6.11",
+    "vuex-persistedstate": "^3.0.1"
   }
 }

@@ -28,7 +28,7 @@ Vue.use(VueRouter)
      }
   },
     {
-      path: '/home',
+      path: '/edit',
       name: 'Home',
       // route level code-splitting
       // this generates a separate chunk (about.[hash].js) for this route
@@ -38,7 +38,13 @@ Vue.use(VueRouter)
         title: '图表编辑',
         keepAlive: false
       }
-    }
+    },
+    {path:'*',
+      component:home,
+      meta: {
+        title: '主页',
+        keepAlive: false
+      }},//全不匹配的情况下，返回404，路由按顺序从上到下，依次匹配。最后一个*能匹配全部，
 ]
 
 const router = new VueRouter({
@@ -47,9 +53,17 @@ const router = new VueRouter({
 
 //路由跳转之前处理
 router.beforeEach((to, from, next) => {
-  next();
+  //console.log(to.matched),返回匹配到的路由
   store.commit("toggleShowLoading",false)
   //页面跳转更改页面标题
+
+/*
+  if (to.matched.length ===0) {  //如果未匹配到路由
+    from.name ? next({ name:from.name }) : next('/');   //如果上级也未匹配到路由则跳转登录页面，如果上级能匹配到则转上级路由
+  } else {
+    next();    //如果匹配到正确跳转
+  }*/
+  next();
   document.title = to.meta.title;
 });
 

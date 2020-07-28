@@ -12,9 +12,9 @@
             <div class="settings_title">
 
                 <span class="settings_title_text">参数调整</span>
-                <el-button class="button_closeDrawer" type="primary" @click="closeDrawer"
+              <!--  <el-button class="button_closeDrawer" type="primary" @click="closeDrawer"
                            size="mini">关闭
-                </el-button>
+                </el-button>-->
             </div>
             <div class="tabs_container">
 
